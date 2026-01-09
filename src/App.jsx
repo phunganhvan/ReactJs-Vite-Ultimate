@@ -10,8 +10,15 @@ const App = () =>  {
     {id: 2, title: "Learning Reactjs"},
     {id: 3, title: "Learning Nodejs"},
   ])
-  const addNewTodo = () => {
-    alert("Add new todo");
+  const randomId = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  const addNewTodo = (title) => {
+    // alert(title);
+    setTodoList ( [
+      ...todoList,
+      {id: randomId(1, 1000000), title: title}
+    ])
   }
 
   return (
