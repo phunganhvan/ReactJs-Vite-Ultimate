@@ -26,8 +26,11 @@ const App = () =>  {
         <div className="todo-container">
           <h1 className="todo-title"> Todo list</h1>
           <TodoNew addNewTodo={addNewTodo}  />
-          <TodoData todo={todoList} />
-          <img src={imgReact} alt="react logo" className="todo-logo" /> 
+          { todoList.length !== 0 ? 
+            <TodoData todo={todoList} />
+                :
+            <img src={imgReact} alt="react logo" className="todo-logo" /> 
+          } 
         </div>
       
       
