@@ -20,6 +20,10 @@ const App = () =>  {
       {id: randomId(1, 1000000), title: title}
     ])
   }
+  const handleDelete = (id) => {
+    let currentTodoList  = todoList.filter (item => item.id !== id);
+    setTodoList (currentTodoList);
+  }
 
   return (
     <>
@@ -27,7 +31,7 @@ const App = () =>  {
           <h1 className="todo-title"> Todo list</h1>
           <TodoNew addNewTodo={addNewTodo}  />
           { todoList.length !== 0 ? 
-            <TodoData todo={todoList} />
+            <TodoData todo={todoList} handleDelete={handleDelete} />
                 :
             <img src={imgReact} alt="react logo" className="todo-logo" /> 
           } 

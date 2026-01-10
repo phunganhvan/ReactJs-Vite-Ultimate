@@ -1,5 +1,11 @@
+// import DeleteTodo from "./DeleteTodo";
+
 const TodoData = (props) => {
-    const { todo } = props;
+    const { todo, handleDelete } = props;
+    const handleClick = (id) => {
+        console.log(">>> Click delete todo id: ", id);
+        handleDelete(id);
+    }
     console.log(">>> Check props todoList: ", todo);
     return (
         <>
@@ -10,7 +16,7 @@ const TodoData = (props) => {
                         return (
                             <div className="todo-item" key={item.id}>
                                 <div>{item.title}</div>
-                                <button>Delete</button> 
+                                <button onClick={ () => handleClick(item.id)} style={{cursor: "pointer"}}> </button>
                             </div>
                         );
                     })
