@@ -8,40 +8,42 @@ import ProductPage from './pages/products.jsx';
 
 import './styles/global.css';
 import {
- createBrowserRouter,
- RouterProvider,
+  createBrowserRouter,
+  RouterProvider,
 } from "react-router-dom";
 const router = createBrowserRouter([
- {
- path: "/",
- element: <App/>,
- },
- {
-  path: "/login",
-  element: <LoginPage/>,
- },
- {
-  path: "/about",
-  element: <div>About Page</div>,
- },
- {
-  path: "/register",
-  element: <RegisterPage/>,
- },
- {
-  path: "/users",
-  element: <UserPage/>,
- },
- {
-  path: "/products",
-  element: <ProductPage/>,
- }
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/users",
+        element: <UserPage />,
+      },
+      {
+        path: "/products",
+        element: <ProductPage />,
+      },
+      {
+        path: "/about",
+        element: <div>About Page</div>,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  }
 
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
-    // <App />
-    <RouterProvider router={router} />
+  // <App />
+  <RouterProvider router={router} />
   // </React.StrictMode>,
 )
