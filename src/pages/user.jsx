@@ -4,7 +4,6 @@ import UserTable from "../components/user/user.table";
 const UserPage = () => {
     return (
         <>
-            <h1>User Page</h1>
             <div style={{ padding: "20px" }}>
                 <UserForm />
                 <UserTable />

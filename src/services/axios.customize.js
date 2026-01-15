@@ -14,8 +14,8 @@ instance.interceptors.request.use(function (config) {
     return config;
   }, function (error) {
     // Do something with request error
-    if(error.response && error.response.data ) 
-        return error.response.data;
+    // console.log(">>> AXIOS REQUEST ERROR: ", error);
+    if(error.response && error.response.data ) return error.response.data;
     return Promise.reject(error);
   }
 );
@@ -29,6 +29,7 @@ instance.interceptors.response.use(function onFulfilled(response) {
   }, function onRejected(error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    if(error.response && error.response.data ) return error.response.data;
     return Promise.reject(error);
   });
 
