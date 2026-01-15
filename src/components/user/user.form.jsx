@@ -1,69 +1,71 @@
-import { Button, Input } from "antd"
+import { Button, Input, notification } from "antd"
 import { useState } from "react"
 import axios from "axios";
+import { createUserAPI } from "../../services/api.services";
 
 const UserForm = () => {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
-    const handleSubmit = (e) => {
-        const URL_BACKEND = "http://localhost:8080/api/v1/user";
-        const data = {
-            fullName: fullName,
-            email: email,
-            password: password,
-            phone: phoneNumber
-        }
-        axios.post(URL_BACKEND, data)
-            .then((response) => {
-                console.log("User created successfully:", response.data);
+    const handleSubmit = async (e) => {
+        const res = await createUserAPI(fullName, email, password, phoneNumber)
+        if (res && res.data) {
+            notification.success({
+                message: "User created successfully",
+                duration: 2,
+                description: `User ${fullName} has been created.`
             })
-            .catch((error) => {
-                console.error("There was an error creating the user!", error);
-            });
+        }
+        else {
+            notification.error({
+                message: "User creation failed",
+                duration: 2,
+                description: JSON.stringify(res.message)
+            })
+        }
         // Handle form submission logic here
-        
+
     }
     return (
         <>
-            <div className="user-form" style={{margin: "20px 0px"}}>
-                <div style={{ display: "flex", gap: "15px", flexDirection: "column"}}>
+            <div className="user-form" style={{ margin: "20px 0px" }}>
+                <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>
                     <div>
                         <span>
                             Full name:
                         </span>
-                        <Input 
+                        <Input
                             value={fullName}
-                            onChange={(e) => { setFullName(e.target.value)}}
-                        /> 
+                            onChange={(e) => { setFullName(e.target.value) }}
+                        />
                     </div>
                     <div>
                         <span>
                             Email:
                         </span>
-                        <Input 
+                        <Input
                             value={email}
-                            onChange={(e) => { setEmail(e.target.value)}}
-                        /> 
+                            onChange={(e) => { setEmail(e.target.value) }}
+                        />
                     </div>
                     <div>
                         <span>
                             Password:
                         </span>
-                        <Input.Password 
+                        <Input.Password
                             value={password}
-                            onChange={(e) => { setPassword(e.target.value)}}
-                        /> 
+                            onChange={(e) => { setPassword(e.target.value) }}
+                        />
                     </div>
                     <div>
                         <span>
                             Phone number:
                         </span>
-                        <Input 
+                        <Input
                             value={phoneNumber}
-                            onChange={(e) => { setPhoneNumber(e.target.value)}}
-                        /> 
+                            onChange={(e) => { setPhoneNumber(e.target.value) }}
+                        />
                     </div>
                     <div>
                         <Button type="primary" onClick={() => handleSubmit()}> Create User</Button>
