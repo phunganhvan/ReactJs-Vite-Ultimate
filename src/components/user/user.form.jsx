@@ -1,5 +1,6 @@
 import { Button, Input } from "antd"
-
+import { useState } from "react"
+import axios from "axios";
 
 const UserForm = () => {
     const [fullName, setFullName] = useState("");
@@ -7,6 +8,20 @@ const UserForm = () => {
     const [password, setPassword] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const handleSubmit = (e) => {
+        const URL_BACKEND = "http://localhost:8080/api/v1/user";
+        const data = {
+            fullName: fullName,
+            email: email,
+            password: password,
+            phone: phoneNumber
+        }
+        axios.post(URL_BACKEND, data)
+            .then((response) => {
+                console.log("User created successfully:", response.data);
+            })
+            .catch((error) => {
+                console.error("There was an error creating the user!", error);
+            });
         // Handle form submission logic here
         
     }
