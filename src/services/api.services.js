@@ -26,8 +26,14 @@ const fetchAllUsersAPI = () => {
     return axios.get(URL_BACKEND);
 }
 
+const deleteUserAPI = (_id) => {
+    const URL_BACKEND = `/api/v1/user/${_id}`;
+    return axios.delete(URL_BACKEND);
+}
+
 export {
     createUserAPI,
     updateUserAPI,
-    fetchAllUsersAPI
+    fetchAllUsersAPI,
+    deleteUserAPI
 }
