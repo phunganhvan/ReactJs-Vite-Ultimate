@@ -3,7 +3,7 @@ import { Table } from "antd";
 import UpdateUserModal from "./updateUser.modal";
 import { useState } from "react";
 import ViewDetailUserModal from "./viewDetailUser.modal";
-import { Button, message, Popconfirm } from 'antd';
+import { message, Popconfirm } from 'antd';
 import { deleteUserAPI } from "../../services/api.services";
 const UserTable = (props) => {
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
