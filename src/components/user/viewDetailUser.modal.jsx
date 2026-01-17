@@ -1,7 +1,8 @@
-import { Button, Drawer } from 'antd';
+import { Button, Drawer, notification } from 'antd';
 import { useState } from 'react';
+import { handleUploadFile, updateUserAvatar } from '../../services/api.services';
 const ViewDetailUserModal = (props) => {
-    const { isDetailModalOpen, setIsDetailModalOpen, dataDetail, setDataDetail } = props;
+    const { isDetailModalOpen, setIsDetailModalOpen, dataDetail, setDataDetail, loadUser } = props;
     // console.log("dataDetail: ", dataDetail);
     const [selectedFile, setSelectedFile] = useState();
     const [preview, setPreview] = useState();
@@ -21,8 +22,46 @@ const ViewDetailUserModal = (props) => {
             setSelectedFile(file);
             setPreview(URL.createObjectURL(file));
         }
-        console.log("Selected file: ", file);
+        // console.log("Selected file: ", file);
         // handle file upload logic here
+    }
+    const handleUpdateAvatar = async () => {
+        // step 1 : upload file to server
+        // event.preventDefault();
+        const resUpload = await handleUploadFile(selectedFile, "avatar");
+        if (resUpload.data) {
+            //success
+            const newAvatar = resUpload.data.fileUploaded;
+            //step 2: update user info with new avatar
+            const resUpdateUser = await updateUserAvatar(newAvatar, dataDetail._id, dataDetail.fullName, dataDetail.phone);
+            if (resUpdateUser && resUpdateUser.data) {
+                setIsDetailModalOpen(false);
+                setPreview(null);
+                setDataDetail({});
+                setSelectedFile(null);
+                await loadUser();
+                notification.success({
+                    message: "Update user avatar successfully",
+                    description: `User: ${dataDetail.fullName} updated with new avatar`
+                });
+            }
+            else {
+                notification.error({
+                    message: "Error update user avatar",
+                    description: JSON.stringify(resUpdateUser.message)
+                });
+            }
+        }
+        else {
+            //failed upload
+            notification.error({
+                message: "Upload avatar failed",
+                description: JSON.stringify(resUpload.message)
+            });
+            return;
+        }
+
+
     }
     return (
         <>
@@ -72,13 +111,22 @@ const ViewDetailUserModal = (props) => {
                     <input type="file" name="avatar" hidden id='btnUpload' onChange={handleChangeAvatar} />
                 </div>
                 {preview &&
-                    <div style={{ marginTop: "10px", height: "125px", width: "150px", border: "1px solid #ccc", borderRadius: "8px" }}>
-                        <img
-                            style={{ objectFit: "contain" }}
-                            height={"100%"} width={"100%"}
-                            src={`${preview}`}
-                        />
-                    </div>}
+                    <>
+                        <div style={{ marginTop: "10px", height: "125px", width: "150px", border: "1px solid #ccc", borderRadius: "8px" }}>
+                            <img
+                                style={{ objectFit: "contain" }}
+                                height={"100%"} width={"100%"}
+                                src={`${preview}`}
+                            />
+                        </div>
+                        <Button
+                            type='primary'
+                            onClick={() => handleUpdateAvatar()}
+                        >
+                            Save
+                        </Button>
+                    </>
+                }
             </Drawer>
         </>
     );
