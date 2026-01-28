@@ -11,17 +11,20 @@ const UserTable = (props) => {
     const [dataDetail, setDataDetail] = useState({});
     const [dataUpdate, setDataUpdate] = useState({});
     // lift - up state
-    const { dataUsers, loadUser } = props;
+    const { dataUsers, loadUser 
+        , current, pageSize, total,
+        setCurrent, setPageSize
+    } = props;
     // delete
     const confirm = async (record) => {
         // console.log(e);
         // message.success('Click on Yes', record);
-        const res= await deleteUserAPI(record);
-        if(res && res.data){
+        const res = await deleteUserAPI(record);
+        if (res && res.data) {
             message.success(`User id ${record} deleted successfully`);
             await loadUser();
         }
-        else{
+        else {
             message.error(`User id ${record} deletion failed: ${JSON.stringify(res.message)}`);
         }
     };
@@ -30,6 +33,14 @@ const UserTable = (props) => {
         message.error('Click on No');
     };
     const columns = [
+        {
+            title: 'Order Number',
+            render: (_, record, index) => {
+                return (
+                    <>{(index + 1) + (current - 1) * pageSize}</>
+                );
+            }
+        },
         {
             title: 'Id',
             dataIndex: '_id',
@@ -93,9 +104,39 @@ const UserTable = (props) => {
             ,
         }
     ];
+
+    const onChange = (pagination, filters, sorter, extra) => {
+        // nếu thay đổi trang
+        if(pagination && pagination.current){
+            if(current !== pagination.current){
+                setCurrent(+pagination.current); // tự convert sang number
+            }
+        }
+
+        // nếu thay đổi tổng số phần tử trên 1 trang
+        if(pagination && pagination.pageSize){
+            if(pageSize !== pagination.pageSize){
+                setPageSize(+pagination.pageSize); // tự convert sang number
+            }
+        }
+        console.log('params', pagination, filters, sorter, extra);
+    }
     return (
         <>
-            <Table columns={columns} dataSource={dataUsers} rowKey="_id" />
+            <Table
+                columns={columns}
+                dataSource={dataUsers}
+                rowKey="_id"
+                pagination={
+                    {
+                        current: current,
+                        pageSize: pageSize,
+                        showSizeChanger: true,
+                        total: total,
+                        showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+                    }}
+                    onChange={onChange}
+            />
             <UpdateUserModal
                 isUpdateModalOpen={isUpdateModalOpen}
                 setIsUpdateModalOpen={setIsUpdateModalOpen}

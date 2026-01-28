@@ -21,8 +21,8 @@ const updateUserAPI = (_id, fullName, phoneNumber) => {
     return axios.put(URL_BACKEND, data);
 }
 
-const fetchAllUsersAPI = () => {
-    const URL_BACKEND = "/api/v1/user";
+const fetchAllUsersAPI = (current, pageSize) => {
+    const URL_BACKEND = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
     return axios.get(URL_BACKEND);
 }
 
