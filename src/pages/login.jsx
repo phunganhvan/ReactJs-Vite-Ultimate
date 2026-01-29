@@ -2,12 +2,14 @@ import { Button, Input, Form, notification, Row, Col, Divider, message } from "a
 import { Link } from "react-router-dom";
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { loginAPI } from "../services/api.services";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
 const LoginPage = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { setUser } = useContext(AuthContext);
     const onFinish = async (value) => {
         // console.log("Success:", value);
         // call API
@@ -17,6 +19,8 @@ const LoginPage = () => {
         if( res.data ){
             // console.log(res);
             message.success(`Welcome back ${res.data.user.fullName}!`);
+            localStorage.setItem("access_token", res.data.access_token);
+            setUser(res.data.user);git 
             form.resetFields();
             navigate("/");
         }
