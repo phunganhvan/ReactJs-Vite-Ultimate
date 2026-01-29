@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom';
-import { UsergroupAddOutlined, HomeOutlined, BookOutlined } from '@ant-design/icons';
+import { UsergroupAddOutlined, HomeOutlined, BookOutlined, SettingOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { useState } from 'react';
 
@@ -45,6 +45,15 @@ const Header = () => {
             //     },
             // ],
         },
+        {
+            label: "Settings",
+            key: 'settingMenu',
+            icon: <SettingOutlined />,
+            children: [
+                { label: <Link to="/login">Login</Link>, key: 'login' },
+                { label: <Link to="/register">Register</Link>, key: 'register' },
+            ]
+        }
         // {
         //     key: 'alipay',
         //     label: (
@@ -54,7 +63,7 @@ const Header = () => {
         //     ),
         // },
     ];
-    
+
     return (
         <>
 
