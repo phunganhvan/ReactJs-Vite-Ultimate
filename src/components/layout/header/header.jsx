@@ -1,18 +1,37 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { UsergroupAddOutlined, HomeOutlined, BookOutlined, SettingOutlined, AliwangwangOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
+import { Menu, message } from 'antd';
 import { useState } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/auth.context';
+import { logoutAPI } from '../../../services/api.services';
 const Header = () => {
     const [current, setCurrent] = useState('');
-    const data = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
+    const navigate = useNavigate();
     // console.log("data header: ", data);
     const onClick = e => {
         // console.log('click ', e);
         // navigator(`/${e.key}`);
         setCurrent(e.key);
     };
+    const handleLogout = async () => {
+        const res = await logoutAPI();
+        if (res.data) {
+            localStorage.removeItem("access_token");
+            message.success("Logout successful!");
+            // clear data
+            setUser({
+                email: "",
+                phone: "",
+                fullName: "",
+                avatar: "",
+                role: "",
+                id: "",
+            });
+            navigate("/");
+        }
+    }
     const items = [
         {
             label: <Link to="/">Home</Link>,
@@ -48,7 +67,7 @@ const Header = () => {
             //     },
             // ],
         },
-        ...(!data.user.id ? [{
+        ...(!user.id ? [{
             label: "Settings",
             key: 'settingMenu',
             icon: <SettingOutlined />,
@@ -57,15 +76,15 @@ const Header = () => {
                 { label: <Link to="/register">Register</Link>, key: 'register' },
             ]
         }] : []),
-        ...(data.user.id ? [{
-            label: `Hello, Welcome ${data.user ? data.user.fullName : 'Guest'}`,
+        ...(user.id ? [{
+            label: `Hello, Welcome ${user ? user.fullName : 'Guest'}`,
             key: 'greeting',
             icon: <AliwangwangOutlined />,
             children: [
-                { label: "logout", key: 'logout' },
+                { label: <span onClick={() => handleLogout()}> Logout</span>, key: 'logout' },
             ]
         }] : []),
-        
+
         // {
         //     key: 'alipay',
         //     label: (
