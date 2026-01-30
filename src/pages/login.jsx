@@ -4,7 +4,7 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { loginAPI } from "../services/api.services";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/auth.context";
+import { AuthContext } from "../components/context/auth.context";
 const LoginPage = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ const LoginPage = () => {
             // console.log(res);
             message.success(`Welcome back ${res.data.user.fullName}!`);
             localStorage.setItem("access_token", res.data.access_token);
-            setUser(res.data.user);git 
+            setUser(res.data.user); 
             form.resetFields();
             navigate("/");
         }
