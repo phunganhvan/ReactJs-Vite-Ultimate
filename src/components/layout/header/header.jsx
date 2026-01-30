@@ -1,15 +1,15 @@
 import { Link, NavLink } from 'react-router-dom';
-import { UsergroupAddOutlined, HomeOutlined, BookOutlined, SettingOutlined } from '@ant-design/icons';
+import { UsergroupAddOutlined, HomeOutlined, BookOutlined, SettingOutlined, AliwangwangOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { useState } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/auth.context';
 const Header = () => {
     const [current, setCurrent] = useState('');
-    const data= useContext(AuthContext);
-    console.log("data header: ", data);
+    const data = useContext(AuthContext);
+    // console.log("data header: ", data);
     const onClick = e => {
-        console.log('click ', e);
+        // console.log('click ', e);
         // navigator(`/${e.key}`);
         setCurrent(e.key);
     };
@@ -48,7 +48,7 @@ const Header = () => {
             //     },
             // ],
         },
-        {
+        ...(!data.user.id ? [{
             label: "Settings",
             key: 'settingMenu',
             icon: <SettingOutlined />,
@@ -56,7 +56,16 @@ const Header = () => {
                 { label: <Link to="/login">Login</Link>, key: 'login' },
                 { label: <Link to="/register">Register</Link>, key: 'register' },
             ]
-        }
+        }] : []),
+        ...(data.user.id ? [{
+            label: `Hello, Welcome ${data.user ? data.user.fullName : 'Guest'}`,
+            key: 'greeting',
+            icon: <AliwangwangOutlined />,
+            children: [
+                { label: "logout", key: 'logout' },
+            ]
+        }] : []),
+        
         // {
         //     key: 'alipay',
         //     label: (

@@ -2,7 +2,7 @@ import { Button, Input, Form, notification, Row, Col, Divider, message } from "a
 import { Link } from "react-router-dom";
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { loginAPI } from "../services/api.services";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/context/auth.context";
 const LoginPage = () => {
@@ -10,6 +10,7 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { setUser } = useContext(AuthContext);
+    // const ref= useRef();
     const onFinish = async (value) => {
         // console.log("Success:", value);
         // call API
@@ -66,7 +67,11 @@ const LoginPage = () => {
                                         { required: true, message: 'Please input your email!' }]}
                                         hasFeedback
                                     >
-                                        <Input />
+                                        <Input 
+                                            onKeyDown={(event) => {
+                                                if(event.key=== "Enter") form.submit()
+                                            }}
+                                        />
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -78,7 +83,11 @@ const LoginPage = () => {
                                         rules={[{ required: true, message: 'Please input your password!' }]}
                                         hasFeedback
                                     >
-                                        <Input.Password />
+                                        <Input.Password 
+                                            onKeyDown={(event) => {
+                                                if(event.key=== "Enter") form.submit()
+                                            }}
+                                        />
                                     </Form.Item>
                                 </Col>
                             </Row>
