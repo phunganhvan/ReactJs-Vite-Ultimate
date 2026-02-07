@@ -42,7 +42,7 @@ const UpdateUserModal = (props) => {
         }
         else {
             notification.error({
-                message: "User creation failed",
+                message: "User UPDATED failed",
                 duration: 2,
                 description: JSON.stringify(res.message)
             })

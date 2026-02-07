@@ -9,7 +9,7 @@ import { Spin } from "antd"
 const App = () => {
   const { setUser, isAppLoading, setIsAppLoading } = useContext(AuthContext);
   const fetchUserInfo = async () => {
-    setIsAppLoading(true);
+    // setIsAppLoading(true);
     const res = await getAccountAPI();
     if (res.data) {
       console.log("res account: ", res.data);
@@ -19,7 +19,7 @@ const App = () => {
   }
   useEffect(() => {
     fetchUserInfo();
-  }, [])
+  }, [isAppLoading])
 
 
   return (

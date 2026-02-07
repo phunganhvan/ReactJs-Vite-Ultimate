@@ -1,33 +1,20 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table } from "antd";
-import UpdateUserModal from "./updateUser.modal";
-import { useState } from "react";
-import ViewDetailUserModal from "./viewDetailUser.modal";
+import { Flex, Space, Table, Tag } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useState } from 'react';
 import { message, Popconfirm } from 'antd';
-import { deleteUserAPI } from "../../services/api.services";
-const UserTable = (props) => {
-    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-    const [dataDetail, setDataDetail] = useState({});
-    const [dataUpdate, setDataUpdate] = useState({});
-    // lift - up state
-    const { dataUsers, loadUser 
+import DetailBookModal from './detailBook.modal';
+const BookTable = (props) => {
+    const { dataBooks, loadBooks
         , current, pageSize, total,
         setCurrent, setPageSize
     } = props;
-    // delete
+    
+    const [dataDetail, setDataDetail] = useState({});
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+    
     const confirm = async (record) => {
-        // console.log(e);
-        // message.success('Click on Yes', record);
-        const res = await deleteUserAPI(record);
-        if (res && res.data) {
-            message.success(`User id ${record} deleted successfully`);
-            await loadUser();
-        }
-        else {
-            message.error(`User id ${record} deletion failed: ${JSON.stringify(res.message)}`);
-        }
-    };
+
+    }
     const cancel = e => {
         console.log(e);
         message.error('Cancel delete');
@@ -47,7 +34,7 @@ const UserTable = (props) => {
             key: '_id',
             render: (_, record) => {
                 return (
-                    <a
+                    <a 
                         href="#"
                         onClick={() => { setIsDetailModalOpen(true); setDataDetail(record); }}
                     >
@@ -57,19 +44,32 @@ const UserTable = (props) => {
             },
         },
         {
-            title: 'Full Name',
-            dataIndex: 'fullName',
-            key: 'fullName',
+            title: 'Tiêu đề',
+            dataIndex: 'mainText',
+            key: 'mainText',
         },
         {
-            title: 'email',
-            dataIndex: 'email',
-            key: 'email',
+            title: 'Giá tiền',
+            dataIndex: 'price',
+            key: 'price',
+            render: (text, record, index, action) => {
+                if (text) 
+                    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(text);
+                else 
+                    return "";
+            }
         },
         {
-            title: 'phone',
-            dataIndex: 'phone',
-            key: 'phone',
+            title: 'Số lượng',
+            key: 'quantity',
+            dataIndex: 'quantity',
+
+        },
+        {
+            title: 'Tác giả',
+            key: 'author',
+            dataIndex: 'author',
+
         },
         {
             title: 'Action',
@@ -81,13 +81,13 @@ const UserTable = (props) => {
                             <EditOutlined
                                 style={{ color: "blue", cursor: "pointer" }}
                                 onClick={() => {
-                                    setDataUpdate(record);
-                                    setIsUpdateModalOpen(true);
+                                    // setDataUpdate(record);
+                                    // setIsUpdateModalOpen(true);
                                 }}
                             />
                             <Popconfirm
-                                title="Delete the task"
-                                description="Are you sure to delete this task?"
+                                title="Delete the book"
+                                description="Are you sure to delete this book?"
                                 onConfirm={() => confirm(record._id)}
                                 onCancel={cancel}
                                 okText="Yes"
@@ -100,32 +100,47 @@ const UserTable = (props) => {
                     </>
                 );
             }
-
-            ,
-        }
+        },
     ];
-
+    const data = [
+        {
+            key: '1',
+            id: "1aasdasd",
+            title: 'Book Title 1',
+            price: 100,
+            quantity: 10,
+            author: 'Author 1',
+        },
+        {
+            key: '2',
+            id: "2asdasd",
+            title: 'Book Title 2',
+            price: 150,
+            quantity: 5,
+            author: 'Author 2',
+        },
+    ];
     const onChange = (pagination, filters, sorter, extra) => {
         // nếu thay đổi trang
-        if(pagination && pagination.current){
-            if(current !== pagination.current){
+        if (pagination && pagination.current) {
+            if (current !== pagination.current) {
                 setCurrent(+pagination.current); // tự convert sang number
             }
         }
 
         // nếu thay đổi tổng số phần tử trên 1 trang
-        if(pagination && pagination.pageSize){
-            if(pageSize !== pagination.pageSize){
+        if (pagination && pagination.pageSize) {
+            if (pageSize !== pagination.pageSize) {
                 setPageSize(+pagination.pageSize); // tự convert sang number
             }
         }
-        console.log('params', pagination, filters, sorter, extra);
+        // console.log('params', pagination, filters, sorter, extra);
     }
     return (
         <>
             <Table
                 columns={columns}
-                dataSource={dataUsers}
+                dataSource={dataBooks}
                 rowKey="_id"
                 pagination={
                     {
@@ -135,24 +150,16 @@ const UserTable = (props) => {
                         total: total,
                         showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
                     }}
-                    onChange={onChange}
+                onChange={onChange}
             />
-            <UpdateUserModal
-                isUpdateModalOpen={isUpdateModalOpen}
-                setIsUpdateModalOpen={setIsUpdateModalOpen}
-                dataUpdate={dataUpdate}
-                setDataUpdate={setDataUpdate}
-                loadUser={loadUser}
-            />
-            <ViewDetailUserModal
+            <DetailBookModal 
                 isDetailModalOpen={isDetailModalOpen}
                 setIsDetailModalOpen={setIsDetailModalOpen}
                 dataDetail={dataDetail}
                 setDataDetail={setDataDetail}
-                loadUser={loadUser}
             />
         </>
     );
 }
 
-export default UserTable;
+export default BookTable;
