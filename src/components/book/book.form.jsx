@@ -10,7 +10,7 @@ const BookForm = (props) => {
     const [category, setCategory] = useState("");
     const [selectedFile, setSelectedFile] = useState();
     const [preview, setPreview] = useState();
-    const { loadBooks } = props;
+    const { loadBooks, isCreateModalOpen, setIsCreateModalOpen } = props;
     const options =
         [
             { value: 'Arts', label: 'Arts' },
@@ -25,8 +25,9 @@ const BookForm = (props) => {
             { value: 'Travel', label: 'Travel' },
         ]
     // modal
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    
 
     const handleCancel = () => {
         setMainText("");
@@ -35,7 +36,7 @@ const BookForm = (props) => {
         setQuantity("");
         setSelectedFile();
         setPreview();
-        setIsModalOpen(false);
+        setIsCreateModalOpen(false);
     }
 
     const handleUploadImg = (event) => {
@@ -72,7 +73,7 @@ const BookForm = (props) => {
             //step 2: update user info with new avatar
             const resCreateBook = await createBookAPI(thumbnail, mainText, author, price, quantity, category);
             if (resCreateBook && resCreateBook.data) {
-                setIsModalOpen(false);
+                setIsCreateModalOpen(false);
                 setSelectedFile(null);
                 setMainText("");
                 setAuthor("");
@@ -113,12 +114,12 @@ const BookForm = (props) => {
             <div className="user-form" style={{ margin: "20px 0px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <h3> Table Books</h3>
-                    <Button type="primary" onClick={() => setIsModalOpen(true)}> Create Book</Button>
+                    <Button type="primary" onClick={() => setIsCreateModalOpen(true)}> Create Book</Button>
                 </div>
                 <Modal
                     title="Create New Book"
                     closable={{ 'aria-label': 'Custom Close Button' }}
-                    open={isModalOpen}
+                    open={isCreateModalOpen}
                     onOk={() => handleSubmit()}
                     onCancel={handleCancel}
                     maskClosable={false}

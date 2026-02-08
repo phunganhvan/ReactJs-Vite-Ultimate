@@ -27,6 +27,7 @@ const UpdateUserModal = (props) => {
         setFullName("");
         setId("");
         setPhoneNumber("");
+        setDataUpdate({});
     }
     const handleSubmit = async () => {
         // alert("click me")

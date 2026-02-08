@@ -3,6 +3,9 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { message, Popconfirm } from 'antd';
 import DetailBookModal from './detailBook.modal';
+import UpdateBookControl from './updateBook.control';
+import UpdateBookUncontrol from './updateBook.uncontrol';
+import { deleteBookAPI } from '../../services/api.services';
 const BookTable = (props) => {
     const { dataBooks, loadBooks
         , current, pageSize, total,
@@ -11,9 +14,18 @@ const BookTable = (props) => {
     
     const [dataDetail, setDataDetail] = useState({});
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-    
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState({});
+    // delete
     const confirm = async (record) => {
-
+        const res= await deleteBookAPI(record);
+        if (res && res.data) {
+            message.success(`Book id ${record} deleted successfully`);
+            await loadBooks();
+        }
+        else {
+            message.error(`Book id ${record} deletion failed: ${JSON.stringify(res.message)}`);
+        }
     }
     const cancel = e => {
         console.log(e);
@@ -81,8 +93,8 @@ const BookTable = (props) => {
                             <EditOutlined
                                 style={{ color: "blue", cursor: "pointer" }}
                                 onClick={() => {
-                                    // setDataUpdate(record);
-                                    // setIsUpdateModalOpen(true);
+                                    setDataUpdate(record);
+                                    setIsUpdateModalOpen(true);
                                 }}
                             />
                             <Popconfirm
@@ -152,6 +164,20 @@ const BookTable = (props) => {
                     }}
                 onChange={onChange}
             />
+            <UpdateBookUncontrol 
+                isUpdateModalOpen={isUpdateModalOpen}
+                setIsUpdateModalOpen={setIsUpdateModalOpen}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                loadBooks={loadBooks}
+            />
+            {/* <UpdateBookControl 
+                isUpdateModalOpen={isUpdateModalOpen}
+                setIsUpdateModalOpen={setIsUpdateModalOpen}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                loadBooks={loadBooks}
+            /> */}
             <DetailBookModal 
                 isDetailModalOpen={isDetailModalOpen}
                 setIsDetailModalOpen={setIsDetailModalOpen}

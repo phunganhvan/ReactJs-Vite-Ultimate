@@ -86,8 +86,8 @@ const UserTable = (props) => {
                                 }}
                             />
                             <Popconfirm
-                                title="Delete the task"
-                                description="Are you sure to delete this task?"
+                                title="Delete the user"
+                                description="Are you sure to delete this user?"
                                 onConfirm={() => confirm(record._id)}
                                 onCancel={cancel}
                                 okText="Yes"

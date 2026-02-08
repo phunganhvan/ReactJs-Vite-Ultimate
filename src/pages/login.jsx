@@ -48,7 +48,6 @@ const LoginPage = () => {
                         <Form
                             layout="vertical"
                             name="basic"
-                            labelAlign="login"
                             form={form}
                             onFinish={onFinish}
                             // onFinishFailed={onFinishFailed}
